@@ -1,3 +1,7 @@
 textfieldFromFilter~from_filter~id
 textfieldToFilter~to_filter~id
 buttonSearch~search-form__submit-btn~id
+buttonSortByPrice~sortby-price~id
+labelCurrencyBeforecomma~//div[@id='results-train']//span[contains(@class,'currency-beforecomma')]~xpath
+labelCurrencyDecimals~//div[@id='results-train']//span[contains(@class,'currency-beforecomma')]/following-sibling::span[contains(@class,'currency-decimals')]~xpath
+checkboxHotel~//label[contains(@class,'hotel-checkbox__airbnb')]~xpath
