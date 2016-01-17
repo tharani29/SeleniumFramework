@@ -10,10 +10,12 @@ public class HomePage {
     WebDriverFactory webfactory = new WebDriverFactory();
 
     public HomePage Search(String fromFilter, String toFilter) throws IOException {
+        webfactory.findMyElement("checkboxHotel").click();
         webfactory.findMyElement("textfieldFromFilter").clear();
         webfactory.findMyElement("textfieldFromFilter").sendKeys(fromFilter);
-        webfactory.findMyElement("textfieldTFilter").clear();
+        webfactory.findMyElement("textfieldToFilter").clear();
         webfactory.findMyElement("textfieldToFilter").sendKeys(toFilter);
+        webfactory.findMyElement("buttonSearch").click();
         webfactory.findMyElement("buttonSearch").click();
         return this;
     }
