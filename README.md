@@ -1,6 +1,13 @@
 ## Synopsis
 
 This is a small test automation framework that combines Selenium & TestNG in a Maven build.
+Features:
+- More stable way of finding web elements
+- TestNG goodies
+- A bank for re-use of web elements
+- Screenshots upon test failure
+- Test logging
+- Element interaction with highlighting
 
 ## Motivation
 
