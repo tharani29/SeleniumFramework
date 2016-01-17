@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="testng" parallel="false">
+            <test name="Sort by price test">
+                <classes>
+                    <class name="selenium.Tests.SortByPriceTest"/>
+                </classes>
+            </test>
+</suite>
