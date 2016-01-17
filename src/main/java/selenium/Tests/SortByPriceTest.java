@@ -11,6 +11,7 @@ import selenium.pageObjects.HomePage;
 import selenium.pageObjects.SearchResultsPage;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 /**
  * Created by stratos on 17/01/2016.
@@ -42,5 +43,9 @@ public class SortByPriceTest {
             }
         }
         Assert.assertTrue(sorted);
+    }
+    @AfterTest
+    public void tearDown() throws MalformedURLException {
+        webFactory.closeDriver();
     }
 }
