@@ -1,5 +1,6 @@
 package selenium.modules;
 import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.*;
@@ -28,10 +29,14 @@ public class WebDriverFactory extends RemoteWebDriver  {
     //get current date time with Date()
     Date date = new Date();
     public static String group;
-    public static RemoteWebDriver driver;
+    public static WebDriver driver;
 
+
+    //For remote Selenium Server
+    /*
+    public static RemoteWebDriver driver;
     public static String getHost(){
-		return System.getProperty("seleniumHost");		
+		return System.getProperty("seleniumHost");
 	}
 
 	public static RemoteWebDriver createRemoteDriver() throws MalformedURLException {
@@ -41,8 +46,12 @@ public class WebDriverFactory extends RemoteWebDriver  {
             org.testng.Assert.fail("Driver could not be retrieved, ensure selenium server is running");
         }
 		return driver;
-	}
-	public RemoteWebDriver getRemoteDriver(){
+	}*/
+    public static WebDriver createDriver() {
+        driver = new FirefoxDriver();
+        return  driver;
+    }
+	public WebDriver getDriver(){
 		return driver;
 	}
     public RemoteWebDriver getTestName(String testName){
@@ -50,39 +59,27 @@ public class WebDriverFactory extends RemoteWebDriver  {
         return this;
     }
 			
-	public WebDriverFactory getPage(String url,ITestContext context) throws MalformedURLException{
-		createRemoteDriver().get(url);
-        getGroupName(context);
+	public WebDriverFactory getPage(String url) throws MalformedURLException{
+        createDriver().get(url);
 		return this;
 	}
-
-
-	public void getGroupName(ITestContext context){
-        List<String> list;
-        list = context.getCurrentXmlTest().getIncludedGroups();
-        group=list.get(0);
-    }
-
-    public String returnGroup() {
-        return group;
-    }
 
 	public WebElement findMyElement(String elementName) throws IOException {	
 		String[] elementData = retrieveElement(elementName);
 		WebElement myElement = null;
 
 		if (elementData[1].equals("id")){
-			WebDriverWait wait = new WebDriverWait(getRemoteDriver(), timeout);
+			WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(elementData[0])));
 			wait.until(ExpectedConditions.elementToBeClickable(By.id(elementData[0])));
-			myElement= getRemoteDriver().findElement(By.id(elementData[0]));
+			myElement= getDriver().findElement(By.id(elementData[0]));
             elementHighlight(myElement);
 		}
 		else if (elementData[1].equals("xpath")){
-			WebDriverWait wait = new WebDriverWait(getRemoteDriver(), timeout);
+			WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(elementData[0])));
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath(elementData[0])));
-			myElement=getRemoteDriver().findElement(By.xpath(elementData[0]));
+			myElement= getDriver().findElement(By.xpath(elementData[0]));
             elementHighlight(myElement);
 		}
 		return myElement;
@@ -99,14 +96,14 @@ public class WebDriverFactory extends RemoteWebDriver  {
 		WebElement myElement = null;
 
         if (elementData[1].equals("id")){
-            WebDriverWait wait = new WebDriverWait(getRemoteDriver(), timeout);
+            WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
             wait.until(ExpectedConditions.visibilityOf(relative.findElement(By.id(elementData[0]))));
 			wait.until(ExpectedConditions.elementToBeClickable(relative.findElement(By.id(elementData[0]))));
             myElement= relative.findElement(By.id(elementData[0]));
             elementHighlight(myElement);
         }
         else if (elementData[1].equals("xpath")){
-            WebDriverWait wait = new WebDriverWait(getRemoteDriver(), timeout);
+            WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
             wait.until(ExpectedConditions.visibilityOf(relative.findElement(By.xpath(elementData[0]))));
 			wait.until(ExpectedConditions.elementToBeClickable(relative.findElement(By.xpath(elementData[0]))));
             myElement=relative.findElement(By.xpath(elementData[0]));
@@ -128,16 +125,16 @@ public class WebDriverFactory extends RemoteWebDriver  {
         WebElement myElement = null;
 
         if (elementData[1].equals("id")){
-            WebDriverWait wait = new WebDriverWait(getRemoteDriver(), timeout);
+            WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(elementData[0])));
 			wait.until(ExpectedConditions.elementToBeClickable(By.id(elementData[0])));
-            elementList= getRemoteDriver().findElements(By.id(elementData[0]));
+            elementList= getDriver().findElements(By.id(elementData[0]));
         }
         else if (elementData[1].equals("xpath")){
-            WebDriverWait wait = new WebDriverWait(getRemoteDriver(), timeout);
+            WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(elementData[0])));
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath(elementData[0])));
-            elementList=getRemoteDriver().findElements(By.xpath(elementData[0]));
+            elementList= getDriver().findElements(By.xpath(elementData[0]));
         }
         if ( elementList.size()>0) {
 
@@ -156,12 +153,12 @@ public class WebDriverFactory extends RemoteWebDriver  {
         }
         return myElement;
     }
-	public String[] retrieveElement(String str) throws IOException{		
+	public String[] retrieveElement(String str) throws IOException{
 		return elementServer.getElement(str);
 	}
 
 	public WebDriverFactory closeDriver() throws MalformedURLException{
-			getRemoteDriver().close();
+			getDriver().close();
 		return this;
 	}
     public WebDriverFactory selectElement(WebElement elementName,String option) throws IOException{
@@ -170,7 +167,7 @@ public class WebDriverFactory extends RemoteWebDriver  {
         return this;
     }
         public void perform(Runnable action, final Callable<Boolean> expectation) {
-        Wait<WebDriver> wait = new FluentWait<WebDriver>(getRemoteDriver())
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(getDriver())
                 .withTimeout(5000, TimeUnit.MILLISECONDS)
                 .pollingEvery(250, TimeUnit.MILLISECONDS);
 
@@ -191,7 +188,7 @@ public class WebDriverFactory extends RemoteWebDriver  {
     }
 	public void takeScreenshot () throws IOException{
 
-			File scrFile = getRemoteDriver().getScreenshotAs(OutputType.FILE);
+			File scrFile = ((TakesScreenshot)getDriver()).getScreenshotAs(OutputType.FILE);
 			FileUtils.copyFile(scrFile, new File("screenshots/screenshot" + test+date + ".png"));
 	}
 
@@ -201,19 +198,19 @@ public class WebDriverFactory extends RemoteWebDriver  {
         Boolean exists = false;
 
         if (elementData[1].equals("id")){
-            WebDriverWait wait = new WebDriverWait(getRemoteDriver(), timeout);
+            WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
             try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(elementData[0])));
-            elementList= getRemoteDriver().findElements(By.id(elementData[0]));
+            elementList= getDriver().findElements(By.id(elementData[0]));
             } catch (TimeoutException e) {
             }
 
         }
         else if (elementData[1].equals("xpath")){
-            WebDriverWait wait = new WebDriverWait(getRemoteDriver(), timeout);
+            WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
             try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(elementData[0])));
-            elementList=getRemoteDriver().findElements(By.xpath(elementData[0]));
+            elementList= getDriver().findElements(By.xpath(elementData[0]));
             } catch (TimeoutException e) {
             }
         }
@@ -224,7 +221,7 @@ public class WebDriverFactory extends RemoteWebDriver  {
     }
     public void elementHighlight(WebElement element) {
         for (int i = 0; i < 2; i++) {
-            JavascriptExecutor js = driver;
+            JavascriptExecutor js = (JavascriptExecutor) getDriver();
             js.executeScript(
                     "arguments[0].setAttribute('style', arguments[1]);",
                     element, "color: red; border: 3px solid red;");
@@ -234,6 +231,6 @@ public class WebDriverFactory extends RemoteWebDriver  {
         }
     }
     public void refreshBrowser (){
-        getRemoteDriver().navigate().refresh();
+        getDriver().navigate().refresh();
     }
 }
