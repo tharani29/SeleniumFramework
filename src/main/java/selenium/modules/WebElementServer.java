@@ -10,7 +10,7 @@ public class WebElementServer {
 	
 	public String[] getElement(String elementName) throws IOException{
 		 
-		  String filePath = "./src/test/externalResources/webElementBank.csv";
+		  String filePath = "./src/main/java/selenium/externalResources/webElementBank.csv";
 		  BufferedReader in = new BufferedReader(new FileReader(filePath));
 	        String str;
 	        String[][] webElements;
