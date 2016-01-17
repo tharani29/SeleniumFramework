@@ -7,14 +7,11 @@ import org.openqa.selenium.support.ui.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 import org.apache.commons.io.FileUtils;
-import org.testng.ITestContext;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +55,7 @@ public class WebDriverFactory extends RemoteWebDriver  {
         test=testName;
         return this;
     }
-			
+
 	public WebDriverFactory getPage(String url) throws MalformedURLException{
         createDriver().get(url);
 		return this;
@@ -84,7 +81,26 @@ public class WebDriverFactory extends RemoteWebDriver  {
 		}
 		return myElement;
 	}
+    public List<WebElement> findAllElements (String elementName) throws IOException {
 
+        String[] elementData = retrieveElement(elementName);
+        List<WebElement> elementList = new ArrayList<>();
+        WebElement myElement = null;
+
+        if (elementData[1].equals("id")){
+            WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(elementData[0])));
+            wait.until(ExpectedConditions.elementToBeClickable(By.id(elementData[0])));
+            elementList= getDriver().findElements(By.id(elementData[0]));
+        }
+        else if (elementData[1].equals("xpath")){
+            WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(elementData[0])));
+            wait.until(ExpectedConditions.elementToBeClickable(By.xpath(elementData[0])));
+            elementList= getDriver().findElements(By.xpath(elementData[0]));
+        }
+        return elementList;
+    }
     /**
      * Used when there are multiple identical elements in a page.
      * @param relative The element that you want to use as a reference
