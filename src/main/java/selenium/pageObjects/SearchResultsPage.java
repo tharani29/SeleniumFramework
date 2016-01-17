@@ -12,7 +12,7 @@ import java.util.List;
 public class SearchResultsPage {
     WebDriverFactory webfactory = new WebDriverFactory();
 
-    public SearchResultsPage SortByPrice() throws IOException {
+    public float[] SortByPrice() throws IOException {
         webfactory.findMyElement("buttonSortByPrice").click();
         List<WebElement> beforeCommaList = webfactory.findAllElements("labelCurrencyBeforecomma");
         List<WebElement> decimalsList = webfactory.findAllElements("labelCurrencyDecimals");
@@ -20,10 +20,9 @@ public class SearchResultsPage {
         float[] currencies;
         currencies = new float[beforeCommaList.size()];
         for (int i = 0; i < beforeCommaList.size(); i++) {
-            System.out.println(decimalsList.get(i).getText());
             currencies[i]=formatCurrency(beforeCommaList.get(i).getText(),decimalsList.get(i).getText());
         }
-        return this;
+        return currencies;
     }
 
     public Float formatCurrency(String beforeComma, String Decimals ){
